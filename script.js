@@ -12,7 +12,8 @@ function updateText() {
     output.style.color = color;
     output.style.textShadow = `
         0 0 ${glow}px ${color},
-        0 0 ${glow * 2}px ${color}
+        0 0 ${glow * 2}px ${color},
+        0 0 ${glow * 3}px ${color}
     `;
 }
 
@@ -20,11 +21,14 @@ input.addEventListener("input", updateText);
 colorPicker.addEventListener("input", updateText);
 glowRange.addEventListener("input", updateText);
 
+// FIX: правильный захват PNG
 downloadBtn.addEventListener("click", () => {
-    html2canvas(output).then(canvas => {
+    const area = document.getElementById("captureArea");
+
+    html2canvas(area, { backgroundColor: null }).then(canvas => {
         const link = document.createElement("a");
         link.download = "wexar1on_neon.png";
-        link.href = canvas.toDataURL();
+        link.href = canvas.toDataURL("image/png");
         link.click();
     });
 });
