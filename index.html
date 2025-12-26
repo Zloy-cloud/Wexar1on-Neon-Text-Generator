@@ -8,6 +8,7 @@
 <body>
 
 <div class="container">
+
     <h1 class="title">🔥 Wexar1on Neon Text Generator</h1>
 
     <input id="textInput" type="text" placeholder="Введите текст..." />
@@ -17,18 +18,22 @@
         <input type="color" id="colorPicker" value="#00ffff">
 
         <label>Сила свечения:</label>
-        <input type="range" id="glowRange" min="5" max="50" value="20">
+        <input type="range" id="glowRange" min="5" max="80" value="35">
     </div>
 
-    <div id="output" class="neon-text">Wexar1on</div>
+   
+    <div id="captureArea">
+        <div id="output" class="neon-text">Wexar1on</div>
+    </div>
 
     <button id="downloadBtn">Скачать PNG</button>
+
 </div>
+
 
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
 <script src="script.js"></script>
-
 </body>
 </html>
 
