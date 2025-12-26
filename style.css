@@ -1,73 +1,136 @@
 body {
-    background: radial-gradient(circle at center, #001, #000);
-    font-family: 'Segoe UI', sans-serif;
-    color: white;
+    background: radial-gradient(circle at top, #04111f, #000000);
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    color: #e0ffff;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0;
+    overflow: hidden;
+    perspective: 1000px;
 }
 
 .container {
     text-align: center;
-    width: 650px;
+    width: 750px;
+    max-width: 95vw;
+    transform: rotateX(8deg);
 }
 
 .title {
-    font-size: 34px;
-    margin-bottom: 25px;
+    font-size: 32px;
+    margin-bottom: 20px;
     color: #0ff;
-    text-shadow: 0 0 15px #0ff;
+    text-shadow: 0 0 12px #0ff, 0 0 30px #0ff;
+    letter-spacing: 2px;
+}
+
+.panel {
+    background: rgba(5, 10, 25, 0.9);
+    border-radius: 16px;
+    padding: 16px 20px;
+    box-shadow: 0 0 25px rgba(0, 255, 255, 0.25);
+    margin-bottom: 20px;
+    border: 1px solid rgba(0, 255, 255, 0.3);
 }
 
 input[type="text"] {
     width: 100%;
-    padding: 14px;
-    font-size: 22px;
-    margin-bottom: 20px;
-    border: none;
+    padding: 12px;
+    font-size: 20px;
+    margin-bottom: 14px;
     border-radius: 8px;
-    background: #111;
+    border: 1px solid #033;
+    background: #050810;
     color: #0ff;
     outline: none;
-    box-shadow: 0 0 10px #0ff;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.3) inset;
 }
 
 .controls {
-    margin-bottom: 20px;
-    font-size: 18px;
+    font-size: 14px;
 }
 
-#captureArea {
-    padding: 40px;
+.control-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 6px 0;
+    gap: 10px;
+}
+
+.control-row label {
+    flex: 1;
+    text-align: left;
+}
+
+.control-row input[type="color"],
+.control-row input[type="number"],
+.control-row input[type="range"] {
+    flex: 1;
+}
+
+#previewWrapper {
+    margin: 30px 0;
+    padding: 30px 10px;
+    border-radius: 18px;
+    background: radial-gradient(circle at center, #02040a, #020308);
+    box-shadow:
+        0 0 40px rgba(0, 255, 255, 0.25),
+        0 0 120px rgba(0, 180, 255, 0.3);
+    transform: rotateX(-8deg) rotateY(-6deg);
+    border: 1px solid rgba(0, 255, 255, 0.35);
 }
 
 .neon-text {
     font-size: 70px;
-    font-weight: bold;
-    transition: 0.2s;
-    animation: pulse 2s infinite ease-in-out;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    text-shadow:
+        0 0 10px #0ff,
+        0 0 20px #0ff,
+        0 0 40px #0ff,
+        0 0 80px #0ff;
+    animation: neonPulse 2.2s infinite ease-in-out;
 }
 
-@keyframes pulse {
-    0% { transform: scale(1); opacity: 0.9; }
-    50% { transform: scale(1.05); opacity: 1; }
-    100% { transform: scale(1); opacity: 0.9; }
+@keyframes neonPulse {
+    0%   { opacity: 0.9; transform: translateZ(0px); }
+    50%  { opacity: 1;   transform: translateZ(18px); }
+    100% { opacity: 0.9; transform: translateZ(0px); }
 }
 
 button {
-    padding: 14px 24px;
-    font-size: 20px;
-    background: #0ff;
+    padding: 14px 26px;
+    font-size: 18px;
+    background: linear-gradient(90deg, #00ffff, #00aaff);
     border: none;
-    border-radius: 8px;
+    border-radius: 999px;
     cursor: pointer;
     color: #000;
     font-weight: bold;
+    letter-spacing: 1px;
+    box-shadow:
+        0 0 15px rgba(0, 255, 255, 0.7),
+        0 0 40px rgba(0, 170, 255, 0.6);
     transition: 0.2s;
 }
 
 button:hover {
-    background: #0cc;
+    transform: translateY(-2px) scale(1.02);
+    box-shadow:
+        0 0 25px rgba(0, 255, 255, 0.9),
+        0 0 60px rgba(0, 170, 255, 0.9);
 }
+
+button:active {
+    transform: translateY(0) scale(0.98);
+}
+
+/* Канвас можно скрыть */
+#renderCanvas {
+    display: none;
+}
+
