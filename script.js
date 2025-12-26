@@ -2,46 +2,79 @@ const input = document.getElementById("textInput");
 const output = document.getElementById("output");
 const colorPicker = document.getElementById("colorPicker");
 const glowRange = document.getElementById("glowRange");
+const fontSizeRange = document.getElementById("fontSizeRange");
+const imgWidthInput = document.getElementById("imgWidth");
+const imgHeightInput = document.getElementById("imgHeight");
 const downloadBtn = document.getElementById("downloadBtn");
+const canvas = document.getElementById("renderCanvas");
 
-function updateText() {
+function updatePreview() {
     const color = colorPicker.value;
     const glow = glowRange.value;
+    const fontSize = fontSizeRange.value;
 
     output.textContent = input.value || "Wexar1on";
     output.style.color = color;
+    output.style.fontSize = fontSize + "px";
     output.style.textShadow = `
         0 0 ${glow}px ${color},
-        0 0 ${glow * 2}px ${color},
-        0 0 ${glow * 3}px ${color}
+        0 0 ${glow * 1.7}px ${color},
+        0 0 ${glow * 2.4}px ${color}
     `;
 }
 
-input.addEventListener("input", updateText);
-colorPicker.addEventListener("input", updateText);
-glowRange.addEventListener("input", updateText);
+input.addEventListener("input", updatePreview);
+colorPicker.addEventListener("input", updatePreview);
+glowRange.addEventListener("input", updatePreview);
+fontSizeRange.addEventListener("input", updatePreview);
 
-// --- FIX: html2canvas ломается на прозрачном фоне ---
-// --- Поэтому временно ставим фон, рендерим, убираем ---
+updatePreview();
+
+// Генерация PNG через canvas
 downloadBtn.addEventListener("click", () => {
-    const area = document.getElementById("captureArea");
+    const text = input.value || "Wexar1on";
+    const color = colorPicker.value;
+    const glow = parseInt(glowRange.value, 10);
 
-    // временный фон, чтобы html2canvas не ломался
-    const oldBg = area.style.background;
-    area.style.background = "#000";
+    const imgWidth = parseInt(imgWidthInput.value || "1200", 10);
+    const imgHeight = parseInt(imgHeightInput.value || "400", 10);
 
-    html2canvas(area, {
-        backgroundColor: "#000",
-        scale: 3, // высокое качество PNG
-    }).then(canvas => {
+    canvas.width = imgWidth;
+    canvas.height = imgHeight;
 
-        // возвращаем фон обратно
-        area.style.background = oldBg;
+    const ctx = canvas.getContext("2d");
 
-        const link = document.createElement("a");
-        link.download = "wexar1on_neon.png";
-        link.href = canvas.toDataURL("image/png");
-        link.click();
-    });
+    // фон
+    ctx.fillStyle = "#000000";
+    ctx.fillRect(0, 0, imgWidth, imgHeight);
+
+    // настройки текста
+    const fontSize = Math.floor(imgHeight * 0.45); // авто‑подбор размера
+    ctx.font = `bold ${fontSize}px "Segoe UI", system-ui, sans-serif`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
+    const x = imgWidth / 2;
+    const y = imgHeight / 2;
+
+    // неон-глоу через множественные тени
+    for (let i = 0; i < 6; i++) {
+        const blur = glow * (0.6 + i * 0.35);
+        ctx.shadowColor = color;
+        ctx.shadowBlur = blur;
+        ctx.fillStyle = color;
+        ctx.fillText(text, x, y);
+    }
+
+    // основной текст без сильной тени
+    ctx.shadowBlur = glow * 0.3;
+    ctx.fillStyle = color;
+    ctx.fillText(text, x, y);
+
+    const link = document.createElement("a");
+    link.download = "wexar1on_neon.png";
+    link.href = canvas.toDataURL("image/png");
+    link.click();
 });
+
 
