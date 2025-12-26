@@ -21,14 +21,27 @@ input.addEventListener("input", updateText);
 colorPicker.addEventListener("input", updateText);
 glowRange.addEventListener("input", updateText);
 
-// FIX: правильный захват PNG
+// --- FIX: html2canvas ломается на прозрачном фоне ---
+// --- Поэтому временно ставим фон, рендерим, убираем ---
 downloadBtn.addEventListener("click", () => {
     const area = document.getElementById("captureArea");
 
-    html2canvas(area, { backgroundColor: null }).then(canvas => {
+    // временный фон, чтобы html2canvas не ломался
+    const oldBg = area.style.background;
+    area.style.background = "#000";
+
+    html2canvas(area, {
+        backgroundColor: "#000",
+        scale: 3, // высокое качество PNG
+    }).then(canvas => {
+
+        // возвращаем фон обратно
+        area.style.background = oldBg;
+
         const link = document.createElement("a");
         link.download = "wexar1on_neon.png";
         link.href = canvas.toDataURL("image/png");
         link.click();
     });
 });
+
